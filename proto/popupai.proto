@@ -1,0 +1,31 @@
+syntax = "proto3";
+package popupai;
+
+option go_package = "github.com/yourusername/in-other-words/apps/daemon_go/proto;popupai";
+
+message AnalyzeReq {
+  string text   = 1;
+  string action = 2;   // "explain", "define", etc.
+  string locale = 3;
+}
+
+message Token {
+  string content = 1;
+  bool done      = 2;
+}
+
+message CaretRect {
+  int32 x = 1;
+  int32 y = 2;
+  int32 w = 3;
+  int32 h = 4;
+}
+
+message TriggerReq {
+  CaretRect caret = 1;
+}
+
+service Core {
+  rpc Analyze(AnalyzeReq) returns (stream Token);
+  rpc TriggerPopup(TriggerReq) returns (Token); // ack
+}
